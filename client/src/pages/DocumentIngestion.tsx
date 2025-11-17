@@ -13,7 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import logoImage from '@assets/generated_images/ShowBusiness_Shield_Logo_c6d9773f.png';
+import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 export default function DocumentIngestion() {
   const [, navigate] = useLocation();
@@ -122,8 +122,8 @@ export default function DocumentIngestion() {
             className="p-6 flex flex-col items-center text-center gap-3 opacity-50 cursor-not-allowed"
             data-testid="card-camera-option"
           >
-            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-              <Camera className="w-6 h-6 text-accent" />
+            <div className="w-12 h-12 rounded-full bg-card border-2 border-accent flex items-center justify-center">
+              <Camera className="w-6 h-6 text-primary" />
             </div>
             <h3 className="font-semibold text-card-foreground" data-testid="text-camera-title">Take Photo</h3>
             <p className="text-xs text-card-foreground/70">Coming soon</p>
@@ -137,7 +137,7 @@ export default function DocumentIngestion() {
                 data-testid="card-upload-option"
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-card border-2 border-accent flex items-center justify-center">
                     <Upload className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-card-foreground" data-testid="text-upload-title">Upload File</h3>
@@ -160,8 +160,8 @@ export default function DocumentIngestion() {
           />
 
           <Card className="p-6 flex flex-col items-center text-center gap-3 opacity-50">
-            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-              <FileText className="w-6 h-6 text-accent" />
+            <div className="w-12 h-12 rounded-full bg-card border-2 border-accent flex items-center justify-center">
+              <FileText className="w-6 h-6 text-primary" />
             </div>
             <h3 className="font-semibold text-card-foreground">System Check</h3>
             <p className="text-xs text-card-foreground/70">Coming soon</p>

@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import logoImage from '@assets/generated_images/ShowBusiness_Shield_Logo_c6d9773f.png';
+import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 export default function CategorySelection() {
   const [, navigate] = useLocation();
@@ -87,7 +87,7 @@ export default function CategorySelection() {
                     data-testid={`card-category-${category.id}`}
                   >
                     <div className="p-8 flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <div className="w-16 h-16 rounded-full bg-card border-2 border-accent flex items-center justify-center flex-shrink-0">
                         <Icon className="w-8 h-8 text-primary" />
                       </div>
                       <div className="flex-1">

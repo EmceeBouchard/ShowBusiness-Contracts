@@ -18,7 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import logoImage from '@assets/generated_images/ShowBusiness_Shield_Logo_c6d9773f.png';
+import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 export default function AnalysisReport() {
   const [, navigate] = useLocation();
