@@ -5,7 +5,6 @@ import type { ContractCategory } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { PrivacyBanner } from "@/components/PrivacyBanner";
 import { useToast } from "@/hooks/use-toast";
 import { useContract } from "@/lib/contractContext";
 import { extractTextFromFile } from "@/lib/documentParsers";
@@ -78,15 +77,6 @@ export default function DocumentIngestion() {
       return;
     }
 
-    const hasGivenConsent = localStorage.getItem("gemini_consent") === "true";
-    
-    if (!hasGivenConsent) {
-      toast({
-        title: "Consent required",
-        description: "You must consent to AI analysis before proceeding. This will be requested on the next screen.",
-      });
-    }
-
     setContractData(contractText, category);
     navigate("/analysis");
   };
@@ -125,8 +115,6 @@ export default function DocumentIngestion() {
             </TooltipContent>
           </Tooltip>
         </div>
-
-        <PrivacyBanner />
 
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           <Card 
@@ -219,7 +207,7 @@ export default function DocumentIngestion() {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Begin AI-powered threat analysis of your contract</p>
+              <p>Begin pattern-based threat analysis of your contract</p>
             </TooltipContent>
           </Tooltip>
         </div>

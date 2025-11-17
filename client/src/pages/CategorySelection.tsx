@@ -3,7 +3,6 @@ import { useLocation } from "wouter";
 import type { ContractCategory } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { PrivacyBanner } from "@/components/PrivacyBanner";
 import { useContract } from "@/lib/contractContext";
 import {
   Tooltip,
@@ -61,8 +60,6 @@ export default function CategorySelection() {
           </div>
         </div>
 
-        <PrivacyBanner />
-
         <div className="mb-8">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3" data-testid="text-category-heading">
             Select Your Contract Type
@@ -117,7 +114,7 @@ export default function CategorySelection() {
 
         <div className="text-center mt-12">
           <p className="text-sm text-muted-foreground">
-            A free tool for the artistic community • Powered by Google Gemini AI • Your consent required
+            A free tool for the artistic community • 100% browser-based pattern matching • No data leaves your device
           </p>
         </div>
       </div>

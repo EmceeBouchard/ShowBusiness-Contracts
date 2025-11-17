@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowLeft, Download, Loader2, Shield } from "lucide-react";
 import { generateUUID } from "@/lib/uuid";
-import type { ContractAnalysis, ThreatFlag, FlagSeverity, ThreatCategory } from "@shared/schema";
+import type { ContractAnalysis, ThreatFlag, FlagSeverity, ThreatCategory, ContractCategory } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FlagCard } from "@/components/FlagCard";
 import { LegalDisclaimer } from "@/components/LegalDisclaimer";
 import { VaultTimer } from "@/components/VaultTimer";
-import { ConsentDialog } from "@/components/ConsentDialog";
 import { saveToVault } from "@/lib/vaultStorage";
 import { useToast } from "@/hooks/use-toast";
 import { useContract } from "@/lib/contractContext";
-import { analyzeContractClientSide } from "@/lib/geminiClient";
-import { THREAT_MATRIX } from "@/lib/threatMatrix";
+import { analyzeContract as analyzeContractPattern } from "@/lib/patternMatcher";
 import {
   Tooltip,
   TooltipContent,
@@ -26,7 +24,6 @@ export default function AnalysisReport() {
   const [, navigate] = useLocation();
   const [analysis, setAnalysis] = useState<ContractAnalysis | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showConsentDialog, setShowConsentDialog] = useState(false);
   const { toast } = useToast();
   const { contractText, category, clearContractData } = useContract();
 
@@ -36,75 +33,40 @@ export default function AnalysisReport() {
       return;
     }
 
-    const hasConsent = localStorage.getItem("gemini_consent") === "true";
-    
-    if (!hasConsent) {
-      setShowConsentDialog(true);
-    } else {
-      analyzeContract();
-    }
+    performAnalysis();
   }, [category, contractText, navigate]);
 
-  const handleConsentGiven = () => {
-    setShowConsentDialog(false);
-    analyzeContract();
-  };
-
-  const handleConsentDeclined = () => {
-    navigate("/");
-    toast({
-      title: "Analysis cancelled",
-      description: "You must consent to AI processing to analyze contracts.",
-    });
-  };
-
-  const analyzeContract = async () => {
+  const performAnalysis = () => {
     if (!category || !contractText) return;
     
     try {
       setIsLoading(true);
 
-        const aiResponse = await analyzeContractClientSide(contractText, category);
-        const flags: ThreatFlag[] = [];
+      const patternResult = analyzeContractPattern(contractText, category);
+      const flags: ThreatFlag[] = [];
 
-        for (const threat of aiResponse.threats) {
-          let severity: FlagSeverity = threat.severity;
-          
-          if (category === "general_vo" || category === "film_tv") {
-            const aiVulnerableCategories: ThreatCategory[] = [
-              "derivative_works",
-              "future_technologies_clause",
-              "perpetual_irrevocable_license",
-              "expansive_partner_license"
-            ];
-            if (aiVulnerableCategories.includes(threat.category)) {
-              severity = "red";
-            }
-          }
+      for (const threat of patternResult.threats) {
+        flags.push({
+          id: generateUUID(),
+          category: threat.category,
+          severity: threat.severity,
+          title: threat.title,
+          clauseText: threat.clauseText,
+          analysis: threat.analysis,
+          revisionSuggestion: threat.revisionSuggestion,
+        });
+      }
 
-          const pattern = THREAT_MATRIX.find(p => p.category === threat.category);
-          
-          flags.push({
-            id: generateUUID(),
-            category: threat.category,
-            severity,
-            title: threat.title,
-            clauseText: threat.clauseText,
-            analysis: threat.analysis,
-            revisionSuggestion: pattern?.revisionTemplate,
-          });
-        }
-
-        for (const greenFlag of aiResponse.greenFlags || []) {
-          flags.push({
-            id: generateUUID(),
-            category: "assignment_of_rights",
-            severity: "green",
-            title: greenFlag.title,
-            clauseText: greenFlag.clauseText,
-            analysis: greenFlag.analysis,
-          });
-        }
+      for (const greenFlag of patternResult.greenFlags || []) {
+        flags.push({
+          id: generateUUID(),
+          category: "assignment_of_rights",
+          severity: "green",
+          title: greenFlag.title,
+          clauseText: greenFlag.clauseText,
+          analysis: greenFlag.analysis,
+        });
+      }
 
         const redCount = flags.filter(f => f.severity === "red").length;
         const yellowCount = flags.filter(f => f.severity === "yellow").length;
@@ -200,6 +162,8 @@ export default function AnalysisReport() {
   };
 
   const handleExportReport = () => {
+    if (!category) return;
+    
     const reportText = `
 ShowBusiness: Contracts - Analysis Report
 Generated: ${new Date(analysis.analyzedAt).toLocaleString()}
@@ -223,7 +187,7 @@ ${flag.revisionSuggestion ? `Suggested Revision: ${flag.revisionSuggestion}` : '
 `).join('\n')}
 
 ---
-LEGAL DISCLAIMER: This is an AI-powered diagnostic and not a substitute for legal advice from a qualified attorney.
+LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute for legal advice from a qualified attorney.
     `.trim();
 
     const blob = new Blob([reportText], { type: 'text/plain' });
@@ -243,14 +207,7 @@ LEGAL DISCLAIMER: This is an AI-powered diagnostic and not a substitute for lega
   };
 
   return (
-    <>
-      <ConsentDialog 
-        open={showConsentDialog}
-        onConsent={handleConsentGiven}
-        onDecline={handleConsentDeclined}
-      />
-      
-      <div className="min-h-screen bg-background pb-16">
+    <div className="min-h-screen bg-background pb-16">
         <VaultTimer />
 
       <div className="container max-w-5xl mx-auto px-4 py-12">
@@ -266,7 +223,7 @@ LEGAL DISCLAIMER: This is an AI-powered diagnostic and not a substitute for lega
               Contract Analysis Report
             </h1>
             <p className="text-base text-foreground/80" data-testid="text-contract-category">
-              {categoryTitles[category]} • Analyzed {new Date(analysis.analyzedAt).toLocaleString()}
+              {category ? categoryTitles[category] : 'Unknown'} • Analyzed {new Date(analysis.analyzedAt).toLocaleString()}
             </p>
           </div>
           <div className="flex gap-2">
@@ -384,7 +341,6 @@ LEGAL DISCLAIMER: This is an AI-powered diagnostic and not a substitute for lega
 
         <LegalDisclaimer />
       </div>
-      </div>
-    </>
+    </div>
   );
 }
