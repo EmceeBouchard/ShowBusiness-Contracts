@@ -215,7 +215,7 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
           <img 
             src={logoImage} 
             alt="ShowBusiness Shield" 
-            className="w-16 h-16 object-contain"
+            className="w-16 h-16 object-cover"
             data-testid="img-logo"
           />
           <div className="flex-1">

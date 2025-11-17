@@ -88,7 +88,7 @@ export default function DocumentIngestion() {
           <img 
             src={logoImage} 
             alt="ShowBusiness Shield" 
-            className="w-16 h-16 object-contain"
+            className="w-16 h-16 object-cover"
             data-testid="img-logo"
           />
           <div className="flex-1">
