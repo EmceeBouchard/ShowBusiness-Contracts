@@ -1,0 +1,48 @@
+You are building a 100% CLIENT-SIDE web application called ShowBusiness: Contracts. This application must run entirely in the browser with ZERO backend services, ZERO API calls, and ZERO external dependencies for contract analysis.
+
+CRITICAL ARCHITECTURE REQUIREMENTS:
+- This is a static HTML/CSS/JavaScript application only
+- NO server-side code
+- NO API calls to Gemini, OpenAI, Claude, or any AI service
+- NO database or backend storage
+- Contract analysis must use pure JavaScript pattern matching and regex
+- All storage uses browser LocalStorage API only
+
+TECHNOLOGY STACK:
+- Frontend: Pure HTML5, CSS3, vanilla JavaScript (or React if preferred)
+- PDF parsing: PDF.js library (client-side)
+- OCR for photos: Tesseract.js (client-side)
+- Text analysis: Custom JavaScript functions using regex and keyword matching
+- Storage: Browser LocalStorage API
+- Deployment target: Static hosting (Netlify, Vercel, or GitHub Pages)
+
+CONTRACT ANALYSIS ENGINE:
+Build a JavaScript-based pattern matching system that:
+1. Takes contract text as input (from paste, PDF, or OCR)
+2. Searches for specific keywords and phrases from the THREAT_MATRIX
+3. Uses regex patterns to identify dangerous clauses
+4. Assigns severity ratings (Green/Yellow/Red) based on matches
+5. Returns analysis results as JSON
+
+Example threat detection pattern:
+```javascript
+const threats = {
+  PERPETUAL_IRREVOCABLE: {
+    keywords: ['perpetual', 'irrevocable', 'in perpetuity'],
+    severity: 'RED',
+    analysis: 'This gives them your rights forever...'
+  }
+}
+
+DO NOT:
+	•	Import any AI/ML libraries
+	•	Make any fetch() calls to external APIs
+	•	Require authentication or API keys
+	•	Use Node.js backend code
+	•	Connect to any database
+DO:
+	•	Use only client-side JavaScript
+	•	Store data in browser LocalStorage
+	•	Process all text locally
+	•	Make it deployable as static files
+Build this application following the visual identity and workflow stages from the original prompt, but implement ALL analysis logic as pure JavaScript pattern matching.
