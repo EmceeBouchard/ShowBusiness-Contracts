@@ -79,10 +79,10 @@ export function FlagCard({ flag, onGetRevision }: FlagCardProps) {
               {flag.severity !== "green" && flag.revisionSuggestion && (
                 <div className="mt-4">
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
                     onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-xs font-semibold hover-elevate active-elevate-2"
+                    className="text-xs font-semibold border-accent text-accent hover:bg-accent/10"
                     data-testid={`button-toggle-revision-${flag.id}`}
                   >
                     {isExpanded ? (

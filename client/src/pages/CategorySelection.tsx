@@ -1,4 +1,4 @@
-import { Mic, Film, Theater } from "lucide-react";
+import { Mic, Film, Theater, ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
 import type { ContractCategory } from "@shared/schema";
 import { Button } from "@/components/ui/button";
@@ -98,8 +98,8 @@ export default function CategorySelection() {
                           {category.description}
                         </p>
                       </div>
-                      <Button variant="ghost" size="icon" className="flex-shrink-0" data-testid={`button-select-${category.id}`}>
-                        →
+                      <Button size="icon" className="flex-shrink-0 bg-accent text-primary hover:bg-accent/80" data-testid={`button-select-${category.id}`}>
+                        <ArrowRight className="w-5 h-5" />
                       </Button>
                     </div>
                   </Card>

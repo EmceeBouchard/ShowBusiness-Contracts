@@ -49,8 +49,8 @@ export function VaultTimer() {
           <TooltipTrigger asChild>
             <Button
               size="icon"
-              variant="ghost"
-              className="h-8 w-8 ml-2"
+              variant="outline"
+              className="h-8 w-8 ml-2 border-accent text-accent hover:bg-accent/10"
               onClick={handleClearVault}
               data-testid="button-clear-vault"
             >

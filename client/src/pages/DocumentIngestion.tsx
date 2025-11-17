@@ -102,9 +102,10 @@ export default function DocumentIngestion() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
                 onClick={() => navigate("/")}
+                className="border-accent text-accent hover:bg-accent/10"
                 data-testid="button-back"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -121,8 +122,8 @@ export default function DocumentIngestion() {
             className="p-6 flex flex-col items-center text-center gap-3 opacity-50 cursor-not-allowed"
             data-testid="card-camera-option"
           >
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-              <Camera className="w-6 h-6 text-muted-foreground" />
+            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+              <Camera className="w-6 h-6 text-accent" />
             </div>
             <h3 className="font-semibold text-card-foreground" data-testid="text-camera-title">Take Photo</h3>
             <p className="text-xs text-card-foreground/70">Coming soon</p>
@@ -159,8 +160,8 @@ export default function DocumentIngestion() {
           />
 
           <Card className="p-6 flex flex-col items-center text-center gap-3 opacity-50">
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-              <FileText className="w-6 h-6 text-muted-foreground" />
+            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+              <FileText className="w-6 h-6 text-accent" />
             </div>
             <h3 className="font-semibold text-card-foreground">System Check</h3>
             <p className="text-xs text-card-foreground/70">Coming soon</p>

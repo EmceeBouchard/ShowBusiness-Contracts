@@ -233,6 +233,7 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
                   variant="outline"
                   size="icon"
                   onClick={handleExportReport}
+                  className="border-accent text-accent hover:bg-accent/10"
                   data-testid="button-export-report"
                 >
                   <Download className="w-5 h-5" />
@@ -246,9 +247,10 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="icon"
                   onClick={() => navigate("/")}
+                  className="border-accent text-accent hover:bg-accent/10"
                   data-testid="button-back"
                 >
                   <ArrowLeft className="w-5 h-5" />
