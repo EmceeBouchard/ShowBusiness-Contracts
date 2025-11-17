@@ -2,7 +2,7 @@
 
 ## Overview
 
-ShowBusiness: Contracts is a privacy-focused, client-side contract analysis tool designed specifically for artists (actors, voice-over talent, stage performers). The application analyzes work-for-hire agreements to identify potentially exploitative clauses using AI-powered threat detection. All contract analysis occurs entirely in the browser using Google's Gemini AI, with explicit user consent required before any data transmission. Analyzed contracts are stored locally in the browser for 7 days before automatic deletion.
+ShowBusiness: Contracts is a **100% client-side** contract analysis tool designed specifically for artists (actors, voice-over talent, stage performers). The application analyzes work-for-hire agreements to identify potentially exploitative clauses using **pure JavaScript pattern matching**. All contract analysis occurs entirely in the browser with **zero external API calls** for analysis. Analyzed contracts are stored locally in the browser for 7 days before automatic deletion.
 
 The application follows a theatrical, prestigious design aesthetic with a color palette of Velvet Red, Antique Gold, and Steel Gray, presenting contract analysis as a "sanctuary" rather than a sterile utility tool.
 
@@ -23,29 +23,35 @@ Preferred communication style: Simple, everyday language.
 
 **State Management**: 
 - React Context API (`ContractProvider`) for sharing contract text and category across pages
-- TanStack Query for server state (minimal usage since processing is client-side)
+- TanStack Query for any future server state needs (currently minimal usage)
 - Local browser storage for vault persistence
 
 **UI Component Library**: shadcn/ui components built on Radix UI primitives, heavily customized to match the theatrical theme. Uses Tailwind CSS with extensive custom color variables defined in `index.css`.
 
 **Typography**: 
-- Headings: Playfair Display (serif, theatrical)
-- Body text: Inter (sans-serif, readable)
+- Headings: Playfair Display (serif, theatrical) - loaded from Google Fonts CDN
+- Body text: Inter (sans-serif, readable) - loaded from Google Fonts CDN
 
 ### Data Processing Architecture
 
-**Document Parsing**:
+**Document Parsing** (Client-Side):
 - PDF extraction: pdfjs-dist library
 - DOCX extraction: mammoth library  
 - TXT files: native browser File API
 - All parsing occurs client-side with no server upload
 
-**AI Analysis Pipeline**:
-1. User must explicitly consent to sending data to Google Gemini (consent stored in localStorage)
-2. Contract text + category sent to Google Gemini AI via `@google/genai` SDK
-3. Gemini analyzes against predefined threat matrix (9 threat categories)
-4. Response parsed into threat flags (red/yellow) and green flags (safe clauses)
-5. Results stored in browser localStorage with 7-day expiry timestamp
+**Pattern Matching Analysis Pipeline** (100% Local):
+1. User uploads/pastes contract text → stored in React Context (in-memory)
+2. User clicks analyze → `analyzeContract()` function in `patternMatcher.ts`
+3. **Pure JavaScript regex and keyword matching** scans for threat patterns
+4. Severity calculated based on:
+   - High-severity keyword indicators
+   - Critical threat categories
+   - AI exploitation detection (for General/VO and Film/TV categories)
+5. Results include threat flags (red/yellow) and green flags (safe clauses)
+6. Results stored in browser localStorage with 7-day expiry timestamp
+
+**NO EXTERNAL AI CALLS**: All analysis happens locally using regex pattern matching against the threat matrix.
 
 **Threat Detection**: Custom threat matrix in `client/src/lib/threatMatrix.ts` defines patterns for:
 - Assignment of Rights
@@ -58,6 +64,10 @@ Preferred communication style: Simple, everyday language.
 - Indemnification Clause
 - Arbitration Clause
 
+**Green Flag Detection**: Positive patterns for:
+- Union-backed agreements (SAG-AFTRA, WGA, DGA, Equity)
+- Fair licensing terms (limited license, residuals, royalties)
+
 ### Local Storage Schema
 
 **Vault Storage** (`showbusiness_contract_vault` key):
@@ -66,13 +76,9 @@ Preferred communication style: Simple, everyday language.
 - Manual purge option available
 - Schema defined in `shared/schema.ts` using Zod
 
-**Consent Storage** (`gemini_consent` key):
-- Boolean flag tracking whether user has consented to AI analysis
-- Persists across sessions
-
 ### Backend Architecture
 
-**Server Role**: Minimal Express server primarily serving static frontend assets. No contract processing occurs on the server.
+**Server Role**: Minimal Express server primarily serving static frontend assets. **Zero contract processing occurs on the server.**
 
 **Database**: Drizzle ORM configured with PostgreSQL (via Neon serverless) but currently unused. Schema exists in `shared/schema.ts` but no database operations are implemented. The application is designed to be fully client-side.
 
@@ -92,24 +98,13 @@ Preferred communication style: Simple, everyday language.
 
 ## External Dependencies
 
-### AI Services
+### Styling CDN
 
-**Google Gemini AI** (via Replit AI Integrations):
-- Primary contract analysis engine
-- API accessed through `@google/genai` SDK
-- Credentials: `VITE_AI_INTEGRATIONS_GEMINI_API_KEY` and `VITE_AI_INTEGRATIONS_GEMINI_BASE_URL`
-- User consent required before any API calls
-- Contract text sent to Google servers for analysis
-- Google's privacy policy applies to transmitted data
-
-### Database (Configured but Unused)
-
-**Neon Serverless PostgreSQL**:
-- Configured via Drizzle ORM (`drizzle.config.ts`)
-- Connection string: `DATABASE_URL` environment variable
-- Schema defined in `shared/schema.ts` but not utilized
-- Migrations output to `./migrations` directory
-- Ready for future implementation of user accounts or cloud backup
+**Google Fonts**: 
+- Playfair Display (serif headings)
+- Inter (sans-serif body text)
+- Loaded from Google Fonts CDN for optimal typography
+- **NOTE**: This is the ONLY external network call - purely for styling, not data processing
 
 ### UI Component Libraries
 
@@ -119,12 +114,12 @@ Preferred communication style: Simple, everyday language.
 
 **Lucide React**: Icon library for UI icons
 
-### Document Processing Libraries
+### Document Processing Libraries (Client-Side)
 
 **PDF.js** (`pdfjs-dist`): Client-side PDF text extraction
 - Worker loaded from CDN: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${version}/build/pdf.worker.min.mjs`
 
-**Mammoth.js**: DOCX to plain text conversion
+**Mammoth.js**: DOCX to plain text conversion (client-side)
 
 ### Development Tools
 
@@ -148,3 +143,56 @@ Preferred communication style: Simple, everyday language.
 - Custom spacing, border radius, and shadow tokens
 
 **date-fns**: Date formatting for vault expiry display
+
+## Recent Changes (November 2025)
+
+### Removed Google Gemini AI Integration
+
+Previously, the application used Google's Gemini AI for contract analysis (with user consent). This has been completely replaced with:
+- **Pure JavaScript pattern matcher** (`client/src/lib/patternMatcher.ts`)
+- Regex-based keyword detection
+- Local severity calculation
+- **Zero external API calls for analysis**
+
+**Deleted Components**:
+- `client/src/lib/geminiClient.ts` - Gemini API integration
+- `client/src/components/ConsentDialog.tsx` - User consent for AI analysis
+- `client/src/components/PrivacyBanner.tsx` - Privacy warnings about Gemini
+- `@google/genai` package dependency
+
+**Updated Messaging**:
+- Removed all references to "AI-powered" analysis
+- Removed consent requirement (no longer needed)
+- Updated footer: "100% browser-based pattern matching • No data leaves your device"
+- Updated HTML meta: "pattern-based threat detection"
+
+### Privacy Architecture (Current)
+
+**User Flow**:
+1. User selects category → stored in React Context (in-memory)
+2. User uploads contract → stored in React Context (in-memory)
+3. User clicks analyze → `patternMatcher.ts` runs synchronously in browser
+4. Results displayed instantly (no loading delay for API calls)
+5. Results stored in localStorage vault with 7-day auto-purge
+
+**Data Privacy**:
+- ✅ **100% browser-based processing**
+- ✅ **Zero contract data sent to external services**
+- ✅ **No consent dialogs needed** (all local)
+- ✅ **localStorage-only storage** (7-day auto-purge)
+- ✅ **Static deployment ready** (no backend required for analysis)
+
+**External Network Calls**:
+- Google Fonts CDN (typography only)
+- PDF.js worker CDN (document parsing only)
+- NO analytics, NO tracking, NO AI services
+
+## Deployment Considerations
+
+This application can be deployed as **pure static files** to:
+- Netlify
+- Vercel
+- GitHub Pages
+- Any static hosting service
+
+The Express server is optional and only needed if you want to serve the files yourself. All contract analysis happens 100% client-side.
