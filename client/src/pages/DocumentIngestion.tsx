@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Camera, Upload, FileText, ArrowLeft, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import type { ContractCategory } from "@shared/schema";
@@ -43,6 +43,12 @@ export default function DocumentIngestion() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
   const { setContractData, category } = useContract();
+
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   if (!category) {
     navigate("/");
@@ -118,8 +124,15 @@ export default function DocumentIngestion() {
     setIsProcessing(true);
     setOcrProgress(0);
 
+    let worker;
     try {
-      const worker = await createWorker('eng');
+      worker = await createWorker('eng', 1, {
+        logger: (m) => {
+          if (m.status === 'recognizing text') {
+            setOcrProgress(Math.round(m.progress * 100));
+          }
+        },
+      });
       
       await worker.setParameters({
         tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!?-()[]{}"\' ',
@@ -131,8 +144,6 @@ export default function DocumentIngestion() {
         hocr: false,
         tsv: false,
       });
-
-      await worker.terminate();
 
       if (data.text && data.text.trim().length > 0) {
         setContractText(prev => prev ? `${prev}\n\n${data.text}` : data.text);
@@ -154,6 +165,9 @@ export default function DocumentIngestion() {
         variant: "destructive",
       });
     } finally {
+      if (worker) {
+        await worker.terminate();
+      }
       setIsProcessing(false);
       setOcrProgress(0);
       setShowCameraDialog(false);
@@ -362,7 +376,7 @@ export default function DocumentIngestion() {
             {isProcessing && (
               <span className="text-sm text-muted-foreground flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Processing file...
+                {ocrProgress > 0 ? `Extracting text: ${ocrProgress}%` : 'Processing file...'}
               </span>
             )}
           </div>
