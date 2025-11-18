@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useLocation } from "wouter";
-import { Camera, Upload, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import { Camera, Upload, FileText, ArrowLeft, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import type { ContractCategory } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,18 +8,39 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useContract } from "@/lib/contractContext";
 import { extractTextFromFile } from "@/lib/documentParsers";
+import { analyzeContract } from "@/lib/patternMatcher";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { createWorker } from 'tesseract.js';
 import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 export default function DocumentIngestion() {
   const [, navigate] = useLocation();
   const [contractText, setContractText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showCameraDialog, setShowCameraDialog] = useState(false);
+  const [showSystemCheckDialog, setShowSystemCheckDialog] = useState(false);
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [ocrProgress, setOcrProgress] = useState(0);
+  const [systemCheckResults, setSystemCheckResults] = useState<{
+    patternMatcher: boolean;
+    documentParsers: boolean;
+    localStorage: boolean;
+    camera: boolean;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
   const { setContractData, category } = useContract();
 
@@ -60,11 +81,141 @@ export default function DocumentIngestion() {
     }
   };
 
-  const handleCameraCapture = () => {
-    toast({
-      title: "Feature Coming Soon",
-      description: "Camera capture with OCR is in development. For now, please upload a file or paste text.",
-    });
+  const handleCameraCapture = async () => {
+    setShowCameraDialog(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      setCameraStream(stream);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      toast({
+        title: "Camera access denied",
+        description: "Please grant camera permissions to use this feature.",
+        variant: "destructive",
+      });
+      setShowCameraDialog(false);
+    }
+  };
+
+  const handleCapture = async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    
+    if (!context) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+
+    stopCamera();
+    setIsProcessing(true);
+    setOcrProgress(0);
+
+    try {
+      const worker = await createWorker('eng');
+      
+      await worker.setParameters({
+        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!?-()[]{}"\' ',
+      });
+
+      const { data } = await worker.recognize(canvas, {}, {
+        text: true,
+        blocks: true,
+        hocr: false,
+        tsv: false,
+      });
+
+      await worker.terminate();
+
+      if (data.text && data.text.trim().length > 0) {
+        setContractText(prev => prev ? `${prev}\n\n${data.text}` : data.text);
+        toast({
+          title: "Text extracted successfully",
+          description: `${data.text.length} characters extracted from the photo.`,
+        });
+      } else {
+        toast({
+          title: "No text detected",
+          description: "Please try again with better lighting or a clearer image.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "OCR failed",
+        description: error instanceof Error ? error.message : "Could not extract text from image.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+      setOcrProgress(0);
+      setShowCameraDialog(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      setCameraStream(null);
+    }
+  };
+
+  const handleSystemCheck = async () => {
+    setShowSystemCheckDialog(true);
+    setIsProcessing(true);
+
+    const results = {
+      patternMatcher: false,
+      documentParsers: false,
+      localStorage: false,
+      camera: false,
+    };
+
+    try {
+      const testContract = `
+        This is a Work-For-Hire Agreement. Artist hereby grants Company a perpetual, 
+        irrevocable, worldwide license to use Artist's work in any manner whatsoever, 
+        including but not limited to future technologies and derivative works.
+      `;
+      const analysis = analyzeContract(testContract, 'general_vo');
+      results.patternMatcher = analysis.threats.length > 0;
+    } catch (error) {
+      console.error('Pattern matcher test failed:', error);
+    }
+
+    try {
+      const testFile = new File(['test content'], 'test.txt', { type: 'text/plain' });
+      await extractTextFromFile(testFile);
+      results.documentParsers = true;
+    } catch (error) {
+      console.error('Document parser test failed:', error);
+    }
+
+    try {
+      localStorage.setItem('showbusiness_test', 'test');
+      const testValue = localStorage.getItem('showbusiness_test');
+      localStorage.removeItem('showbusiness_test');
+      results.localStorage = testValue === 'test';
+    } catch (error) {
+      console.error('LocalStorage test failed:', error);
+    }
+
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      results.camera = devices.some(device => device.kind === 'videoinput');
+    } catch (error) {
+      console.error('Camera check failed:', error);
+    }
+
+    setSystemCheckResults(results);
+    setIsProcessing(false);
   };
 
   const handleAnalyze = () => {
@@ -118,16 +269,26 @@ export default function DocumentIngestion() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <Card 
-            className="p-6 flex flex-col items-center text-center gap-3 opacity-50 cursor-not-allowed"
-            data-testid="card-camera-option"
-          >
-            <div className="w-12 h-12 rounded-full bg-card border-2 border-accent flex items-center justify-center">
-              <Camera className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="font-semibold text-card-foreground" data-testid="text-camera-title">Take Photo</h3>
-            <p className="text-xs text-card-foreground/70">Coming soon</p>
-          </Card>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Card 
+                className="hover-elevate active-elevate-2 cursor-pointer transition-all"
+                onClick={handleCameraCapture}
+                data-testid="card-camera-option"
+              >
+                <div className="p-6 flex flex-col items-center text-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                    <Camera className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                  </div>
+                  <h3 className="font-semibold text-card-foreground" data-testid="text-camera-title">Take Photo</h3>
+                  <p className="text-xs text-card-foreground/70">Capture & OCR</p>
+                </div>
+              </Card>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              <p>Use your device camera to capture contract pages. Text will be extracted automatically using OCR.</p>
+            </TooltipContent>
+          </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
@@ -137,8 +298,8 @@ export default function DocumentIngestion() {
                 data-testid="card-upload-option"
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 border-accent flex items-center justify-center">
-                    <Upload className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                    <Upload className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
                   </div>
                   <h3 className="font-semibold text-card-foreground" data-testid="text-upload-title">Upload File</h3>
                   <p className="text-xs text-card-foreground/70">PDF, DOCX, or TXT</p>
@@ -159,13 +320,26 @@ export default function DocumentIngestion() {
             data-testid="input-file-upload"
           />
 
-          <Card className="p-6 flex flex-col items-center text-center gap-3 opacity-50">
-            <div className="w-12 h-12 rounded-full bg-card border-2 border-accent flex items-center justify-center">
-              <FileText className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="font-semibold text-card-foreground">System Check</h3>
-            <p className="text-xs text-card-foreground/70">Coming soon</p>
-          </Card>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Card 
+                className="hover-elevate active-elevate-2 cursor-pointer transition-all"
+                onClick={handleSystemCheck}
+                data-testid="card-system-check-option"
+              >
+                <div className="p-6 flex flex-col items-center text-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                    <FileText className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                  </div>
+                  <h3 className="font-semibold text-card-foreground">System Check</h3>
+                  <p className="text-xs text-card-foreground/70">Test Features</p>
+                </div>
+              </Card>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              <p>Verify that all app features are working correctly on your device.</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <Card className="p-6 mb-6">
@@ -213,6 +387,123 @@ export default function DocumentIngestion() {
           </Tooltip>
         </div>
       </div>
+
+      <Dialog open={showCameraDialog} onOpenChange={(open) => {
+        if (!open) {
+          stopCamera();
+          setShowCameraDialog(false);
+        }
+      }}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Capture Contract Photo</DialogTitle>
+            <DialogDescription>
+              Position your contract in the camera frame and click capture. Text will be extracted automatically.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+                data-testid="video-camera-preview"
+              />
+            </div>
+            <canvas ref={canvasRef} className="hidden" />
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  stopCamera();
+                  setShowCameraDialog(false);
+                }}
+                data-testid="button-cancel-camera"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleCapture}
+                disabled={isProcessing}
+                data-testid="button-capture-photo"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Extracting Text...
+                  </>
+                ) : (
+                  <>
+                    <Camera className="w-4 h-4 mr-2" />
+                    Capture Photo
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showSystemCheckDialog} onOpenChange={setShowSystemCheckDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>System Check</DialogTitle>
+            <DialogDescription>
+              Verifying that all features are working correctly on your device
+            </DialogDescription>
+          </DialogHeader>
+          {isProcessing ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(45, 50%, 58%)' }} />
+            </div>
+          ) : systemCheckResults && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-pattern-matcher">
+                <span className="text-sm font-medium text-card-foreground">Pattern Matcher</span>
+                {systemCheckResults.patternMatcher ? (
+                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                ) : (
+                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                )}
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-document-parsers">
+                <span className="text-sm font-medium text-card-foreground">Document Parsers</span>
+                {systemCheckResults.documentParsers ? (
+                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                ) : (
+                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                )}
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-local-storage">
+                <span className="text-sm font-medium text-card-foreground">Local Storage</span>
+                {systemCheckResults.localStorage ? (
+                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                ) : (
+                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                )}
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-camera">
+                <span className="text-sm font-medium text-card-foreground">Camera Access</span>
+                {systemCheckResults.camera ? (
+                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                ) : (
+                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                )}
+              </div>
+              <div className="pt-3">
+                <Button
+                  onClick={() => setShowSystemCheckDialog(false)}
+                  className="w-full"
+                  data-testid="button-close-system-check"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
