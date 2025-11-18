@@ -87,8 +87,8 @@ export default function CategorySelection() {
                     data-testid={`card-category-${category.id}`}
                   >
                     <div className="p-8 flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-full bg-card border-2 border-accent flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-8 h-8 text-primary" />
+                      <div className="w-16 h-16 rounded-full bg-card border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                        <Icon className="w-8 h-8" style={{ color: 'hsl(344, 65%, 50%)' }} />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-serif text-2xl font-bold text-card-foreground mb-2" data-testid={`text-category-title-${category.id}`}>
