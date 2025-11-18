@@ -103,7 +103,7 @@ export default function CategorySelection() {
                     </div>
                   </Card>
                 </TooltipTrigger>
-                <TooltipContent side="left" className="max-w-xs">
+                <TooltipContent side="top" className="max-w-xs">
                   <p>Click to analyze a {category.title.toLowerCase()} contract</p>
                 </TooltipContent>
               </Tooltip>
