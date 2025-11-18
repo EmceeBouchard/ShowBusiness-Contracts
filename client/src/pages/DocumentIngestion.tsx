@@ -249,11 +249,11 @@ export default function DocumentIngestion() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-4xl mx-auto px-4 py-12">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-start gap-4 mb-8">
           <img 
             src={logoImage} 
             alt="ShowBusiness Shield" 
-            className="w-16 h-16 object-cover"
+            className="w-20 h-20 object-cover flex-shrink-0"
             data-testid="img-logo"
           />
           <div className="flex-1">
@@ -276,7 +276,7 @@ export default function DocumentIngestion() {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent side="bottom">
               <p>Back to category selection</p>
             </TooltipContent>
           </Tooltip>
@@ -289,9 +289,10 @@ export default function DocumentIngestion() {
                 className="hover-elevate active-elevate-2 cursor-pointer transition-all"
                 onClick={handleCameraCapture}
                 data-testid="card-camera-option"
+                style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
                     <Camera className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
                   </div>
                   <h3 className="font-semibold text-card-foreground" data-testid="text-camera-title">Take Photo</h3>
@@ -299,7 +300,7 @@ export default function DocumentIngestion() {
                 </div>
               </Card>
             </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
+            <TooltipContent side="bottom" className="max-w-xs">
               <p>Use your device camera to capture contract pages. Text will be extracted automatically using OCR.</p>
             </TooltipContent>
           </Tooltip>
@@ -310,9 +311,10 @@ export default function DocumentIngestion() {
                 className="hover-elevate active-elevate-2 cursor-pointer transition-all"
                 onClick={() => fileInputRef.current?.click()}
                 data-testid="card-upload-option"
+                style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
                     <Upload className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
                   </div>
                   <h3 className="font-semibold text-card-foreground" data-testid="text-upload-title">Upload File</h3>
@@ -320,7 +322,7 @@ export default function DocumentIngestion() {
                 </div>
               </Card>
             </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
+            <TooltipContent side="bottom" className="max-w-xs">
               <p>The most reliable method. Upload a standard PDF, DOCX, or TXT file for a full analysis.</p>
             </TooltipContent>
           </Tooltip>
@@ -340,9 +342,10 @@ export default function DocumentIngestion() {
                 className="hover-elevate active-elevate-2 cursor-pointer transition-all"
                 onClick={handleSystemCheck}
                 data-testid="card-system-check-option"
+                style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
                     <FileText className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
                   </div>
                   <h3 className="font-semibold text-card-foreground">System Check</h3>
@@ -350,7 +353,7 @@ export default function DocumentIngestion() {
                 </div>
               </Card>
             </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
+            <TooltipContent side="bottom" className="max-w-xs">
               <p>Verify that all app features are working correctly on your device.</p>
             </TooltipContent>
           </Tooltip>

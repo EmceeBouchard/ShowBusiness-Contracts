@@ -43,11 +43,11 @@ export default function CategorySelection() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-4xl mx-auto px-4 py-12">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-start gap-4 mb-8">
           <img 
             src={logoImage} 
             alt="ShowBusiness Shield" 
-            className="w-16 h-16 object-cover"
+            className="w-24 h-24 object-cover flex-shrink-0"
             data-testid="img-logo"
           />
           <div>
@@ -85,9 +85,10 @@ export default function CategorySelection() {
                     className="hover-elevate active-elevate-2 cursor-pointer transition-all duration-200" 
                     onClick={handleCategorySelect}
                     data-testid={`card-category-${category.id}`}
+                    style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
                   >
                     <div className="p-8 flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-full bg-card border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: 'hsl(45, 50%, 58%)' }}>
+                      <div className="w-16 h-16 rounded-full bg-card border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
                         <Icon className="w-8 h-8" style={{ color: 'hsl(344, 65%, 50%)' }} />
                       </div>
                       <div className="flex-1">
@@ -98,13 +99,11 @@ export default function CategorySelection() {
                           {category.description}
                         </p>
                       </div>
-                      <Button size="icon" className="flex-shrink-0 bg-accent text-primary hover:bg-accent/80" data-testid={`button-select-${category.id}`}>
-                        <ArrowRight className="w-5 h-5" />
-                      </Button>
+                      <ArrowRight className="w-5 h-5 flex-shrink-0" style={{ color: 'hsl(344, 65%, 50%)' }} data-testid={`button-select-${category.id}`} />
                     </div>
                   </Card>
                 </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-xs">
+                <TooltipContent side="left" className="max-w-xs">
                   <p>Click to analyze a {category.title.toLowerCase()} contract</p>
                 </TooltipContent>
               </Tooltip>
@@ -113,7 +112,7 @@ export default function CategorySelection() {
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm" style={{ color: 'hsl(0, 0%, 100%)' }}>
             A free tool for the artistic community • 100% browser-based pattern matching • No data leaves your device
           </p>
         </div>
