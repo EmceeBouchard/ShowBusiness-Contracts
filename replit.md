@@ -38,7 +38,24 @@ Preferred communication style: Simple, everyday language.
 - PDF extraction: pdfjs-dist library
 - DOCX extraction: mammoth library  
 - TXT files: native browser File API
+- **Camera OCR**: Tesseract.js for optical character recognition from camera photos
 - All parsing occurs client-side with no server upload
+
+**Camera Capture Feature** (NEW - November 2025):
+- Uses browser MediaDevices API to access device camera
+- Captures contract photos directly in the browser
+- Tesseract.js OCR extracts text from captured images
+- Progress feedback during text extraction (0-100%)
+- Proper cleanup: Camera stream stopped on dialog close or component unmount
+- Privacy-focused: No images uploaded to servers, all OCR processing happens locally
+
+**System Check Feature** (NEW - November 2025):
+- Diagnostic tool to verify all app features are working
+- Tests pattern matcher with sample exploitative contract
+- Tests document parsers with mock file
+- Tests localStorage read/write functionality
+- Tests camera availability via enumerateDevices
+- Displays results with visual indicators (green checkmarks or red X icons)
 
 **Pattern Matching Analysis Pipeline** (100% Local):
 1. User uploads/pastes contract text → stored in React Context (in-memory)
@@ -121,6 +138,11 @@ Preferred communication style: Simple, everyday language.
 
 **Mammoth.js**: DOCX to plain text conversion (client-side)
 
+**Tesseract.js** (`tesseract.js`): Client-side OCR for extracting text from camera-captured images
+- Uses English language model
+- Progress tracking during recognition
+- Worker properly terminated after use to prevent memory leaks
+
 ### Development Tools
 
 **Replit Plugins**:
@@ -145,6 +167,26 @@ Preferred communication style: Simple, everyday language.
 **date-fns**: Date formatting for vault expiry display
 
 ## Recent Changes (November 2025)
+
+### Added Camera OCR and System Check Features (November 18, 2025)
+
+**Camera Capture with OCR**:
+- Implemented real-time camera capture using MediaDevices API
+- Integrated Tesseract.js for client-side optical character recognition
+- Added progress feedback during text extraction
+- Implemented proper cleanup (useEffect unmount cleanup + try/finally for worker termination)
+- Privacy-safe: Camera stream automatically stopped when dialog closes or user navigates away
+
+**System Diagnostics**:
+- Added comprehensive system check to verify all features
+- Tests pattern matcher, document parsers, localStorage, and camera availability
+- Visual feedback with green checkmarks for passing tests, red X for failures
+- Helps users troubleshoot compatibility issues on different devices/browsers
+
+**UI Updates**:
+- Made "Take Photo" and "System Check" cards fully functional (removed "Coming soon")
+- Applied inline red/gold colors to all icons for older browser compatibility
+- Added Dialog components for both camera capture and system check
 
 ### Removed Google Gemini AI Integration
 
