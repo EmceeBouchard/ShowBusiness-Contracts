@@ -82,7 +82,8 @@ export function FlagCard({ flag, onGetRevision }: FlagCardProps) {
                     variant="outline"
                     size="sm"
                     onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-xs font-semibold border-accent text-accent hover:bg-accent/10"
+                    className="text-xs font-semibold"
+                    style={{ borderColor: 'hsl(344, 65%, 50%)', color: 'hsl(344, 65%, 50%)' }}
                     data-testid={`button-toggle-revision-${flag.id}`}
                   >
                     {isExpanded ? (
