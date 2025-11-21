@@ -50,7 +50,8 @@ export function VaultTimer() {
             <Button
               size="icon"
               variant="outline"
-              className="h-8 w-8 ml-2 border-accent text-accent hover:bg-accent/10"
+              className="h-8 w-8 ml-2"
+              style={{ borderColor: 'hsl(344, 65%, 50%)', color: 'hsl(344, 65%, 50%)' }}
               onClick={handleClearVault}
               data-testid="button-clear-vault"
             >
