@@ -38,10 +38,10 @@ export function VaultTimer() {
   return (
     <div className="fixed top-4 right-4 z-50">
       <div className="flex items-center gap-2 bg-card border-2 border-primary/30 rounded-md px-4 py-2 shadow-lg">
-        <Clock className="w-4 h-4 text-primary" data-testid="icon-vault-timer" />
+        <Clock className="w-4 h-4" style={{ color: 'hsl(344, 65%, 50%)' }} data-testid="icon-vault-timer" />
         <div className="flex flex-col">
           <span className="text-xs text-muted-foreground font-medium">Vault Expires In</span>
-          <span className="text-sm font-bold text-primary font-mono" data-testid="text-vault-time">
+          <span className="text-sm font-bold font-mono" style={{ color: 'hsl(344, 65%, 50%)' }} data-testid="text-vault-time">
             {formatTimeRemaining(timeRemaining)}
           </span>
         </div>
