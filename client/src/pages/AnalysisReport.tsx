@@ -208,8 +208,6 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
 
   return (
     <div className="min-h-screen bg-background pb-16">
-        <VaultTimer />
-
       <div className="container max-w-5xl mx-auto px-4 py-12">
         <div className="flex items-center gap-4 mb-8">
           <img 
@@ -226,6 +224,7 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
               {category ? categoryTitles[category] : 'Unknown'} • Analyzed {new Date(analysis.analyzedAt).toLocaleString()}
             </p>
           </div>
+          <VaultTimer />
           <div className="flex gap-2">
             <Tooltip>
               <TooltipTrigger asChild>

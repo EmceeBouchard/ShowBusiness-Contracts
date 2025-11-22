@@ -36,8 +36,7 @@ export function VaultTimer() {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50">
-      <div className="flex items-center gap-2 bg-card border-2 border-primary/30 rounded-md px-4 py-2 shadow-lg">
+    <div className="flex items-center gap-2 bg-card border-2 border-primary/30 rounded-md px-4 py-2 shadow-lg flex-shrink-0">
         <Clock className="w-4 h-4" style={{ color: 'hsl(344, 65%, 50%)' }} data-testid="icon-vault-timer" />
         <div className="flex flex-col">
           <span className="text-xs text-muted-foreground font-medium">Vault Expires In</span>
@@ -63,6 +62,5 @@ export function VaultTimer() {
           </TooltipContent>
         </Tooltip>
       </div>
-    </div>
   );
 }
