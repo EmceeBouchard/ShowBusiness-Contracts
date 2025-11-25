@@ -26,6 +26,8 @@ export const threatFlagSchema = z.object({
   title: z.string(),
   clauseText: z.string(),
   analysis: z.string(),
+  context: z.string().optional(),
+  strategicNote: z.string().optional(),
   revisionSuggestion: z.string().optional(),
 });
 export type ThreatFlag = z.infer<typeof threatFlagSchema>;

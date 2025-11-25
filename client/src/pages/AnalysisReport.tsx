@@ -53,6 +53,8 @@ export default function AnalysisReport() {
           title: threat.title,
           clauseText: threat.clauseText,
           analysis: threat.analysis,
+          context: threat.context,
+          strategicNote: threat.strategicNote,
           revisionSuggestion: threat.revisionSuggestion,
         });
       }
@@ -339,6 +341,57 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
             </div>
           </div>
         )}
+
+        <Card className="p-8 mb-8 border-2 border-accent/30 bg-accent/5">
+          <h2 className="font-serif text-2xl font-bold text-foreground mb-4" data-testid="heading-final-summary">
+            Final Summary & Strategic Recommendation
+          </h2>
+          
+          <div className="space-y-4 text-sm text-card-foreground leading-relaxed">
+            <div>
+              <p className="font-semibold mb-2">Overall Risk Assessment</p>
+              <p data-testid="text-risk-assessment">
+                {analysis?.overallRiskLevel === "danger" 
+                  ? "This contract contains multiple predatory or exploitative clauses. Signing without substantial revisions could severely limit your rights and expose you to financial or reputational risk. We strongly recommend seeking legal counsel before proceeding." 
+                  : analysis?.overallRiskLevel === "caution"
+                  ? "This contract contains some concerning language or ambiguities that should be clarified or negotiated. Several clauses are negotiable, and you have room to push back. Professional review is recommended."
+                  : "This contract appears to use fair, standard terms typical of the industry. No major red flags detected, though you may still want to confirm specifics align with your needs."}
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold mb-2">Key Takeaways</p>
+              <ul className="list-disc list-inside space-y-1 text-card-foreground/90" data-testid="text-key-takeaways">
+                {redFlags.length > 0 && (
+                  <li><strong>{redFlags.length} CRITICAL issue(s)</strong> require negotiation or legal review before signing.</li>
+                )}
+                {yellowFlags.length > 0 && (
+                  <li><strong>{yellowFlags.length} negotiable item(s)</strong> to clarify or improve.</li>
+                )}
+                {greenFlags.length > 0 && (
+                  <li><strong>{greenFlags.length} positive clause(s)</strong> protecting your interests.</li>
+                )}
+              </ul>
+            </div>
+
+            <div>
+              <p className="font-semibold mb-2">Next Steps</p>
+              <p className="text-card-foreground/90" data-testid="text-next-steps">
+                {analysis?.overallRiskLevel === "danger"
+                  ? "1) Do NOT sign yet. 2) Consult a contract attorney, ideally one familiar with entertainment/creative work. 3) Use our suggested revisions as negotiation points. 4) Ask the company to justify any clauses they won't modify."
+                  : analysis?.overallRiskLevel === "caution"
+                  ? "1) Email the company with specific questions about vague clauses. 2) Propose our suggested revisions. 3) If they refuse negotiation, consider legal review before signing. 4) Document all communications."
+                  : "1) Review this report one more time. 2) Confirm the compensation aligns with your needs. 3) If satisfied, you're ready to sign. 4) Keep a copy for your records."}
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-border/30">
+              <p className="text-xs text-muted-foreground italic" data-testid="text-summary-footer">
+                Remember: This analysis identifies patterns and potential risks. It is not a substitute for legal advice. Every contract is unique, and your specific circumstances matter. If anything feels wrong, trust your instincts and seek professional counsel.
+              </p>
+            </div>
+          </div>
+        </Card>
 
         <LegalDisclaimer />
       </div>

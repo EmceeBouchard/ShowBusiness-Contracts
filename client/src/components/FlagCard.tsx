@@ -72,9 +72,32 @@ export function FlagCard({ flag, onGetRevision }: FlagCardProps) {
                 </div>
               )}
 
-              <p className="text-sm text-card-foreground leading-relaxed" data-testid={`text-analysis-${flag.id}`}>
-                {flag.analysis}
-              </p>
+              <div className="mt-4 space-y-4">
+                <div>
+                  <p className="text-sm font-semibold text-card-foreground mb-2">Analysis</p>
+                  <p className="text-sm text-card-foreground leading-relaxed" data-testid={`text-analysis-${flag.id}`}>
+                    {flag.analysis}
+                  </p>
+                </div>
+
+                {flag.context && (
+                  <div>
+                    <p className="text-sm font-semibold text-card-foreground mb-2">Industry Context</p>
+                    <p className="text-sm text-card-foreground/90 leading-relaxed italic" data-testid={`text-context-${flag.id}`}>
+                      {flag.context}
+                    </p>
+                  </div>
+                )}
+
+                {flag.strategicNote && (
+                  <div>
+                    <p className="text-sm font-semibold text-card-foreground mb-2">Strategic Note</p>
+                    <p className="text-sm text-card-foreground/90 leading-relaxed" data-testid={`text-strategic-${flag.id}`}>
+                      {flag.strategicNote}
+                    </p>
+                  </div>
+                )}
+              </div>
 
               {flag.severity !== "green" && flag.revisionSuggestion && (
                 <div className="mt-4">
