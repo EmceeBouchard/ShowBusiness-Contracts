@@ -7,6 +7,8 @@ export interface DetectedThreat {
   title: string;
   clauseText: string;
   analysis: string;
+  context: string;
+  strategicNote: string;
   revisionSuggestion: string;
 }
 
@@ -152,6 +154,8 @@ export function analyzeContract(
         title: pattern.title,
         clauseText,
         analysis,
+        context: pattern.context,
+        strategicNote: pattern.strategicNote,
         revisionSuggestion: pattern.revisionTemplate
       });
     }
