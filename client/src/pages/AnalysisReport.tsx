@@ -342,15 +342,15 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
           </div>
         )}
 
-        <Card className="p-8 mb-8 border-2 border-accent/30 bg-accent/5">
-          <h2 className="font-serif text-2xl font-bold text-foreground mb-4" data-testid="heading-final-summary">
+        <Card className="p-8 mb-8 border-2 border-primary bg-primary">
+          <h2 className="font-serif text-2xl font-bold text-white mb-4" data-testid="heading-final-summary">
             Final Summary & Strategic Recommendation
           </h2>
           
-          <div className="space-y-4 text-sm text-card-foreground leading-relaxed">
+          <div className="space-y-4 text-sm text-white leading-relaxed">
             <div>
-              <p className="font-semibold mb-2">Overall Risk Assessment</p>
-              <p data-testid="text-risk-assessment">
+              <p className="font-semibold mb-2 text-white">Overall Risk Assessment</p>
+              <p data-testid="text-risk-assessment" className="text-white">
                 {analysis?.overallRiskLevel === "danger" 
                   ? "This contract contains multiple predatory or exploitative clauses. Signing without substantial revisions could severely limit your rights and expose you to financial or reputational risk. We strongly recommend seeking legal counsel before proceeding." 
                   : analysis?.overallRiskLevel === "caution"
@@ -360,8 +360,8 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
             </div>
 
             <div>
-              <p className="font-semibold mb-2">Key Takeaways</p>
-              <ul className="list-disc list-inside space-y-1 text-card-foreground/90" data-testid="text-key-takeaways">
+              <p className="font-semibold mb-2 text-white">Key Takeaways</p>
+              <ul className="list-disc list-inside space-y-1 text-white" data-testid="text-key-takeaways">
                 {redFlags.length > 0 && (
                   <li><strong>{redFlags.length} CRITICAL issue(s)</strong> require negotiation or legal review before signing.</li>
                 )}
@@ -375,8 +375,8 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
             </div>
 
             <div>
-              <p className="font-semibold mb-2">Next Steps</p>
-              <p className="text-card-foreground/90" data-testid="text-next-steps">
+              <p className="font-semibold mb-2 text-white">Next Steps</p>
+              <p className="text-white" data-testid="text-next-steps">
                 {analysis?.overallRiskLevel === "danger"
                   ? "1) Do NOT sign yet. 2) Consult a contract attorney, ideally one familiar with entertainment/creative work. 3) Use our suggested revisions as negotiation points. 4) Ask the company to justify any clauses they won't modify."
                   : analysis?.overallRiskLevel === "caution"
@@ -385,8 +385,8 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
               </p>
             </div>
 
-            <div className="pt-4 border-t border-border/30">
-              <p className="text-xs text-muted-foreground italic" data-testid="text-summary-footer">
+            <div className="pt-4 border-t border-white/30">
+              <p className="text-xs text-white/80 italic" data-testid="text-summary-footer">
                 Remember: This analysis identifies patterns and potential risks. It is not a substitute for legal advice. Every contract is unique, and your specific circumstances matter. If anything feels wrong, trust your instincts and seek professional counsel.
               </p>
             </div>
