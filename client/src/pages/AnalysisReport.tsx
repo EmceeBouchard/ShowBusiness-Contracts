@@ -8,8 +8,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FlagCard } from "@/components/FlagCard";
 import { LegalDisclaimer } from "@/components/LegalDisclaimer";
-import { VaultTimer } from "@/components/VaultTimer";
-import { saveToVault } from "@/lib/vaultStorage";
 import { useToast } from "@/hooks/use-toast";
 import { useContract } from "@/lib/contractContext";
 import { analyzeContract as analyzeContractPattern } from "@/lib/patternMatcher";
@@ -92,7 +90,6 @@ export default function AnalysisReport() {
         };
 
         setAnalysis(result);
-        saveToVault(result);
 
         toast({
           title: "Analysis complete",
@@ -226,7 +223,6 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
               {category ? categoryTitles[category] : 'Unknown'} • Analyzed {new Date(analysis.analyzedAt).toLocaleString()}
             </p>
           </div>
-          <VaultTimer />
           <div className="flex gap-2">
             <Tooltip>
               <TooltipTrigger asChild>

@@ -42,14 +42,6 @@ export const contractAnalysisSchema = z.object({
 });
 export type ContractAnalysis = z.infer<typeof contractAnalysisSchema>;
 
-export const vaultEntrySchema = z.object({
-  id: z.string(),
-  analysis: contractAnalysisSchema,
-  createdAt: z.string(),
-  expiresAt: z.string(),
-});
-export type VaultEntry = z.infer<typeof vaultEntrySchema>;
-
 export const analyzeContractRequestSchema = z.object({
   contractText: z.string().min(50, "Contract text must be at least 50 characters"),
   category: contractCategorySchema,
