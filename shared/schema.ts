@@ -15,7 +15,9 @@ export const threatCategorySchema = z.enum([
   "expansive_partner_license",
   "unilateral_modification_clause",
   "indemnification_clause",
-  "arbitration_clause"
+  "arbitration_clause",
+  "ai_training_data_clause",
+  "digital_replica_clause"
 ]);
 export type ThreatCategory = z.infer<typeof threatCategorySchema>;
 

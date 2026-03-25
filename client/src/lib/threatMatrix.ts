@@ -55,11 +55,18 @@ export const THREAT_MATRIX: ThreatPattern[] = [
       "any media now known or later developed",
       "in any medium whether now known",
       "technologies not yet invented",
-      "future formats"
+      "future formats",
+      "generative AI",
+      "artificial intelligence",
+      "digital replica",
+      "synthetic performance",
+      "scan performer",
+      "volumetric capture",
+      "biometric data"
     ],
     title: "Future Technologies Clause",
     description: "This is a blank check for the future. They can use your work in AI training, VR, metaverse, or technologies that don't even exist yet—without asking or paying you.",
-    context: "Future Technologies clauses are becoming increasingly dangerous post-2023, with the rise of generative AI. Traditional media companies have used them for decades (to cover VHS→DVD→streaming evolution), but they now enable AI voice cloning and synthetic performance. This is a CRITICAL issue for voice actors and performers. SAG-AFTRA and WGA now explicitly restrict these clauses.",
+    context: "Future Technologies clauses are becoming increasingly dangerous post-2023, with the rise of generative AI. Traditional media companies have used them for decades (to cover VHS→DVD→streaming evolution), but they now enable AI voice cloning and synthetic performance. This is a CRITICAL issue for voice actors and performers. SAG-AFTRA and WGA now explicitly restrict these clauses. California AB 2602 (effective January 1, 2025) and New York SB 7676B now require contracts to describe digital replica uses with 'reasonable specificity'—broad future-technologies boilerplate fails this standard and may be void as against public policy in CA and NY.",
     strategicNote: "CRITICAL: Flag for legal review—do not accept. This is the primary vector for AI exploitation. Insist on specific media list (Film, TV, Streaming) with explicit AI restrictions. Any agreement using your likeness/voice must explicitly prohibit AI training, deepfakes, and synthetic recreation. This is non-negotiable.",
     revisionTemplate: "Suggested revision: 'License is limited to media and technologies specifically listed: [Film, Television, Streaming]. Any use in formats developed after this agreement requires separate negotiation and compensation. Explicitly excluded: AI training, synthetic voice generation, deepfakes, and digital replicas.'"
   },
@@ -74,7 +81,11 @@ export const THREAT_MATRIX: ThreatPattern[] = [
       "prepare derivative",
       "remix",
       "revise",
-      "create adaptations"
+      "create adaptations",
+      "digital double",
+      "digital twin",
+      "synthetic performer",
+      "deepfake"
     ],
     title: "Derivative Works Clause",
     description: "This is the 'voice clone' or 'remix' clause. They can modify, adapt, or create entirely new works based on yours without your involvement or additional payment.",
@@ -91,7 +102,11 @@ export const THREAT_MATRIX: ThreatPattern[] = [
       "for marketing",
       "for any purpose",
       "in support of",
-      "related to the project"
+      "related to the project",
+      "to improve our services",
+      "product development",
+      "platform improvement",
+      "to develop and improve"
     ],
     title: "Vague Purpose Clause",
     description: "Expansive usage rights hidden behind vague language. What exactly is 'promotional purposes'? This could mean anything from social media to billboards to product packaging.",
@@ -165,12 +180,63 @@ export const THREAT_MATRIX: ThreatPattern[] = [
     context: "Mandatory arbitration is standard in tech/platform ToS, but legally controversial for individual service contracts. Arbitration favors repeat players (corporations) over one-off participants (artists). You lose appeal rights, jury trials, and public precedent. Many jurisdictions (CA, NY) are restricting these clauses for workers.",
     strategicNote: "Flag for legal review—negotiate for mutual arbitration or court access. If accepted, ensure: arbitration is neutral (not company-friendly), costs are split equally, and you can appeal. Compare to union agreements—arbitration WITH your union rep is fair; unilateral company arbitration is not. Cost: attorney time to review.",
     revisionTemplate: "Suggested revision: 'Disputes shall first be negotiated in good faith. If unresolved, either party may pursue resolution in [your state] courts. Both parties retain all legal rights and remedies.'"
+  },
+  {
+    category: "ai_training_data_clause",
+    keywords: [
+      "train AI",
+      "train a model",
+      "training data",
+      "AI training",
+      "machine learning training",
+      "improve AI",
+      "train generative",
+      "data for training",
+      "model training",
+      "improve our AI",
+      "train our systems",
+      "improve our systems",
+      "AI development",
+      "training purposes",
+      "train machine learning"
+    ],
+    title: "AI Training Data Clause",
+    description: "This authorizes the company to feed your voice, likeness, or performance into AI model training—potentially building a system that replicates or replaces you with no additional consent or payment.",
+    context: "AI training consent is an emerging flashpoint in every major union negotiation. SAG-AFTRA's 2025 Commercials Contract secured the industry's first contractual restriction on using member work to train AI systems—a protection the 2026 TV/Theatrical negotiations are pushing to extend. The 2023 SAG-AFTRA TV/Theatrical agreement deferred training-data compensation entirely; the 2026 talks treat it as a top priority. Non-union contracts routinely bury AI training consent inside broad IP grants or platform-improvement language. Illinois BIPA and Texas CUBI impose separate liability for collecting biometric identifiers (facial geometry, voiceprint) without explicit written consent, even when embedded in a standard services agreement.",
+    strategicNote: "CRITICAL: Do not accept without legal review. Your performance data used to train an AI model can generate unlimited replicas of your voice and likeness permanently, yielding zero ongoing compensation. Require: (1) explicit exclusion of AI training uses, (2) if training consent is unavoidable, a separate per-use licensing fee and a data-deletion schedule. SAG-AFTRA's 2026 negotiations are specifically targeting this clause type—accepting it now undermines the union's bargaining position and your own future leverage.",
+    revisionTemplate: "Suggested revision: 'Company shall not use any recording, scan, biometric data, or performance capture derived from Artist's participation to train, fine-tune, or develop any artificial intelligence, machine learning, or generative AI system. Any such use requires a separate written agreement executed before capture and additional compensation negotiated at that time.'"
+  },
+  {
+    category: "digital_replica_clause",
+    keywords: [
+      "digital replica",
+      "digital double",
+      "digital twin",
+      "synthetic performer",
+      "AI-generated likeness",
+      "deepfake",
+      "virtual representation",
+      "scan your likeness",
+      "capture your likeness",
+      "replicate your voice",
+      "replicate your appearance",
+      "photorealistic representation",
+      "voice synthesis",
+      "facial capture",
+      "body scan",
+      "likeness scan"
+    ],
+    title: "Digital Replica / Digital Double Clause",
+    description: "This authorizes the creation of a synthetic version of you—your face, voice, or full performance—that can be deployed in content you never participated in, without additional payment or approval.",
+    context: "California AB 2602 (effective January 1, 2025) and New York SB 7676B established that digital replica clauses must describe all intended uses with 'reasonable specificity' and require the performer to have legal or union representation during negotiation. Provisions that fail this standard are void as against public policy in California. SAG-AFTRA's 2023 TV/Theatrical agreement and 2025 Interactive Media Agreement both require separate, written consent for each distinct use of a digital replica—signing a body-scan release for VFX does NOT automatically authorize use in sequels, marketing, or AI training. Studios have attempted to scan background performers for a half-day's pay and reuse the replica indefinitely; the 2025 IMA explicitly prohibits this. In May 2025, SAG-AFTRA filed an unfair labor practice charge against Llama Productions (Fortnite) for replacing a performer with an AI-generated vocal replica without bargaining.",
+    strategicNote: "CRITICAL: Flag for legal review. If you are in California or New York, AB 2602 / SB 7676B give you grounds to challenge vague replica clauses as unenforceable. Require: (1) a specific, enumerated list of all intended uses, (2) separate compensation for each use beyond the original performance, (3) explicit right to approve or veto each use, (4) automatic expiration and certified data deletion upon contract end. A one-time scan fee is not a fair trade for an unlimited synthetic replica—you are effectively selling your identity at a fraction of its lifetime value.",
+    revisionTemplate: "Suggested revision: 'Any digital replica, digital double, or AI-generated representation of Artist's voice or likeness may only be created and used for the specific purposes enumerated herein: [list each use]. Each additional use requires Artist's prior written approval and separate compensation agreed in writing before that use. All captured biometric data shall be permanently deleted within 30 days of final project delivery. This clause is intended to comply with California AB 2602 and New York SB 7676B.'"
   }
 ];
 
 export const GREEN_FLAG_PATTERNS = [
   {
-    keywords: ["SAG-AFTRA", "equity", "union contract", "guild agreement", "WGA", "DGA"],
+    keywords: ["SAG-AFTRA", "equity", "union contract", "guild agreement", "WGA", "DGA", "2025 IMA", "Interactive Media Agreement"],
     title: "Union-Backed Agreement",
     description: "This contract appears to follow standard union guidelines. These are generally protective of artist rights."
   },
@@ -178,5 +244,10 @@ export const GREEN_FLAG_PATTERNS = [
     keywords: ["limited license", "specific use", "defined term", "royalties", "residuals"],
     title: "Fair Licensing Terms",
     description: "This clause includes reasonable limitations on usage, which is standard and fair for the industry."
+  },
+  {
+    keywords: ["digital replica consent", "written consent for digital replica", "AB 2602", "replica approval rights", "data deletion", "delete biometric", "no AI training", "exclude AI training"],
+    title: "Digital Replica Protections Present",
+    description: "This contract includes explicit consent, approval rights, or deletion requirements for digital replicas—consistent with California AB 2602, New York SB 7676B, and SAG-AFTRA 2025 IMA standards."
   }
 ];
