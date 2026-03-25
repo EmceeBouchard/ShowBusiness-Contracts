@@ -38,7 +38,9 @@ export const THREAT_MATRIX: ThreatPattern[] = [
       "forever",
       "indefinite",
       "permanent license",
-      "non-terminable"
+      "non-terminable",
+      "throughout the universe",
+      "throughout the world and universe"
     ],
     title: "Perpetual Irrevocable License",
     description: "This is functionally identical to a buyout. They can use your work forever without ever paying you again, and you can never revoke permission.",
@@ -106,7 +108,11 @@ export const THREAT_MATRIX: ThreatPattern[] = [
       "to improve our services",
       "product development",
       "platform improvement",
-      "to develop and improve"
+      "to develop and improve",
+      "analyze engagement data",
+      "automated tools",
+      "engagement data",
+      "using automated"
     ],
     title: "Vague Purpose Clause",
     description: "Expansive usage rights hidden behind vague language. What exactly is 'promotional purposes'? This could mean anything from social media to billboards to product packaging.",
