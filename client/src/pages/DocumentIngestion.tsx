@@ -327,18 +327,9 @@ export default function DocumentIngestion() {
             </TooltipContent>
           </Tooltip>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,.docx,.txt,text/plain,application/pdf"
-            onChange={handleFileUpload}
-            className="hidden"
-            data-testid="input-file-upload"
-          />
-
           <Tooltip>
             <TooltipTrigger asChild>
-              <Card 
+              <Card
                 className="hover-elevate active-elevate-2 cursor-pointer transition-all"
                 onClick={handleSystemCheck}
                 data-testid="card-system-check-option"
@@ -358,6 +349,16 @@ export default function DocumentIngestion() {
             </TooltipContent>
           </Tooltip>
         </div>
+
+        {/* File input lives outside the grid so it never affects layout */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".pdf,.docx,.txt,text/plain,application/pdf"
+          onChange={handleFileUpload}
+          className="hidden"
+          data-testid="input-file-upload"
+        />
 
         <Card className="p-6 mb-6">
           <label className="block mb-3">
