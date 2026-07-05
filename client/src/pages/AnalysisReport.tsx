@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, useSearch } from "wouter";
 import { ArrowLeft, Download, Loader2, Shield } from "lucide-react";
 import { generateUUID } from "@/lib/uuid";
 import type { ContractAnalysis, ThreatFlag, FlagSeverity, ThreatCategory, ContractCategory } from "@shared/schema";
@@ -11,6 +11,7 @@ import { LegalDisclaimer } from "@/components/LegalDisclaimer";
 import { useToast } from "@/hooks/use-toast";
 import { useContract } from "@/lib/contractContext";
 import { analyzeContract as analyzeContractPattern } from "@/lib/patternMatcher";
+import { saveAnalysis, loadAnalysis, entryToAnalysis } from "@/lib/vault";
 import {
   Tooltip,
   TooltipContent,
@@ -20,19 +21,34 @@ import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 export default function AnalysisReport() {
   const [, navigate] = useLocation();
+  const search = useSearch();
   const [analysis, setAnalysis] = useState<ContractAnalysis | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [savedToVault, setSavedToVault] = useState(false);
   const { toast } = useToast();
   const { contractText, category, clearContractData } = useContract();
 
+  const savedId = new URLSearchParams(search).get("saved");
+
   useEffect(() => {
+    if (savedId) {
+      const entry = loadAnalysis(savedId);
+      if (!entry) {
+        navigate("/");
+        return;
+      }
+      setAnalysis(entryToAnalysis(entry));
+      setSavedToVault(true);
+      return;
+    }
+
     if (!category || !contractText) {
       navigate("/");
       return;
     }
 
     performAnalysis();
-  }, [category, contractText, navigate]);
+  }, [savedId, category, contractText, navigate]);
 
   const performAnalysis = () => {
     if (!category || !contractText) return;
@@ -90,6 +106,7 @@ export default function AnalysisReport() {
         };
 
         setAnalysis(result);
+        setSavedToVault(saveAnalysis(result));
 
         toast({
           title: "Analysis complete",
@@ -161,12 +178,10 @@ export default function AnalysisReport() {
   };
 
   const handleExportReport = () => {
-    if (!category) return;
-    
     const reportText = `
 ShowBusiness: Contracts - Analysis Report
 Generated: ${new Date(analysis.analyzedAt).toLocaleString()}
-Category: ${categoryTitles[category]}
+Category: ${categoryTitles[analysis.category]}
 Overall Risk: ${riskLevelConfig[analysis.overallRiskLevel].label}
 
 Total Flags: ${analysis.flags.length}
@@ -220,8 +235,13 @@ LEGAL DISCLAIMER: This is a pattern-based diagnostic tool and not a substitute f
               Contract Analysis Report
             </h1>
             <p className="text-base text-foreground/80" data-testid="text-contract-category">
-              {category ? categoryTitles[category] : 'Unknown'} • Analyzed {new Date(analysis.analyzedAt).toLocaleString()}
+              {categoryTitles[analysis.category]} • Analyzed {new Date(analysis.analyzedAt).toLocaleString()}
             </p>
+            {savedToVault && (
+              <p className="text-xs text-muted-foreground mt-1" data-testid="text-vault-note">
+                Saved on this device · auto-deletes in 7 days
+              </p>
+            )}
           </div>
           <div className="flex gap-2">
             <Tooltip>

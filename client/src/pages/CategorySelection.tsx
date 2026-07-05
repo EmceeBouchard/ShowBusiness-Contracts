@@ -1,9 +1,12 @@
-import { Mic, Film, Theater, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Mic, Film, Theater, ArrowRight, Trash2 } from "lucide-react";
 import { useLocation } from "wouter";
 import type { ContractCategory } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useContract } from "@/lib/contractContext";
+import { loadAnalyses, deleteAnalysis, type VaultEntry } from "@/lib/vault";
 import {
   Tooltip,
   TooltipContent,
@@ -11,9 +14,31 @@ import {
 } from "@/components/ui/tooltip";
 import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
+const riskBadgeConfig = {
+  safe: {
+    color: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+    label: "Low Risk"
+  },
+  caution: {
+    color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300",
+    label: "Moderate Risk"
+  },
+  danger: {
+    color: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+    label: "High Risk"
+  }
+};
+
 export default function CategorySelection() {
   const [, navigate] = useLocation();
   const { setCategory } = useContract();
+  const [recentAnalyses, setRecentAnalyses] = useState<VaultEntry[]>(() => loadAnalyses());
+
+  const handleDeleteEntry = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    deleteAnalysis(id);
+    setRecentAnalyses(prev => prev.filter(entry => entry.id !== id));
+  };
   const categories: Array<{
     id: ContractCategory;
     title: string;
@@ -110,6 +135,51 @@ export default function CategorySelection() {
             );
           })}
         </div>
+
+        {recentAnalyses.length > 0 && (
+          <div className="mt-12" data-testid="section-recent-analyses">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-3" data-testid="text-recent-heading">
+              Recent Analyses
+            </h2>
+            <div className="grid gap-3 mb-3">
+              {recentAnalyses.map((entry) => (
+                <Card
+                  key={entry.id}
+                  className="hover-elevate active-elevate-2 cursor-pointer transition-all duration-200"
+                  onClick={() => navigate(`/analysis?saved=${entry.id}`)}
+                  data-testid={`card-recent-${entry.id}`}
+                  style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
+                >
+                  <div className="p-4 flex items-center gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-serif text-lg font-bold text-card-foreground" data-testid={`text-recent-category-${entry.id}`}>
+                        {categories.find(c => c.id === entry.category)?.title ?? entry.category}
+                      </h3>
+                      <p className="text-sm text-card-foreground/70" data-testid={`text-recent-date-${entry.id}`}>
+                        Analyzed {new Date(entry.analyzedAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <Badge className={riskBadgeConfig[entry.riskLevel].color} data-testid={`badge-recent-risk-${entry.id}`}>
+                      {riskBadgeConfig[entry.riskLevel].label}
+                    </Badge>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => handleDeleteEntry(e, entry.id)}
+                      aria-label="Delete saved analysis"
+                      data-testid={`button-delete-recent-${entry.id}`}
+                    >
+                      <Trash2 className="w-4 h-4" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground" data-testid="text-vault-storage-note">
+              Stored only in your browser · auto-deletes after 7 days
+            </p>
+          </div>
+        )}
 
         <div className="text-center mt-12">
           <p className="text-sm" style={{ color: 'hsl(0, 0%, 100%)' }}>
