@@ -16,15 +16,15 @@ import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 const riskBadgeConfig = {
   safe: {
-    color: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+    color: "bg-success/20 text-success border-success/30",
     label: "Low Risk"
   },
   caution: {
-    color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300",
+    color: "bg-warning/20 text-warning border-warning/30",
     label: "Moderate Risk"
   },
   danger: {
-    color: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+    color: "bg-destructive/20 text-destructive border-destructive/30",
     label: "High Risk"
   }
 };
@@ -66,35 +66,35 @@ export default function CategorySelection() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen stage-gradient">
       <div className="container max-w-4xl mx-auto px-4 py-12">
-        <div className="flex items-start gap-4 mb-8">
-          <img 
-            src={logoImage} 
-            alt="ShowBusiness Shield" 
-            className="w-24 h-24 object-cover flex-shrink-0"
+        <div className="flex items-start gap-4 mb-8 animate-fade-in-up">
+          <img
+            src={logoImage}
+            alt="ShowBusiness Shield"
+            className="w-24 h-24 object-cover flex-shrink-0 rounded-lg"
             data-testid="img-logo"
           />
           <div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-2" data-testid="text-app-title">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-gradient-primary mb-2" data-testid="text-app-title">
               ShowBusiness: Contracts
             </h1>
-            <p className="text-lg text-foreground/80" data-testid="text-app-subtitle">
+            <p className="font-body text-lg text-muted-foreground" data-testid="text-app-subtitle">
               Your Contract Analysis Shield
             </p>
           </div>
         </div>
 
         <div className="mb-8">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3" data-testid="text-category-heading">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3" data-testid="text-category-heading">
             Select Your Contract Type
           </h2>
-          <p className="text-base text-foreground/80" data-testid="text-category-description">
+          <p className="text-base text-muted-foreground" data-testid="text-category-description">
             Choose the category that best matches your work-for-hire agreement. This helps us apply the right analysis rules.
           </p>
         </div>
 
-        <div className="grid gap-6 mb-8">
+        <div className="grid gap-6 mb-8 animate-fade-in-up">
           {categories.map((category) => {
             const Icon = category.icon;
             
@@ -106,25 +106,24 @@ export default function CategorySelection() {
             return (
               <Tooltip key={category.id}>
                 <TooltipTrigger asChild>
-                  <Card 
-                    className="hover-elevate active-elevate-2 cursor-pointer transition-all duration-200" 
+                  <Card
+                    className="group hover-elevate active-elevate-2 cursor-pointer transition-colors duration-200 hover:border-primary/50"
                     onClick={handleCategorySelect}
                     data-testid={`card-category-${category.id}`}
-                    style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
                   >
                     <div className="p-8 flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-full bg-card border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
-                        <Icon className="w-8 h-8" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-8 h-8 text-primary" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-serif text-2xl font-bold text-card-foreground mb-2" data-testid={`text-category-title-${category.id}`}>
+                        <h3 className="font-display text-2xl font-bold text-card-foreground mb-2" data-testid={`text-category-title-${category.id}`}>
                           {category.title}
                         </h3>
-                        <p className="text-sm text-card-foreground/80" data-testid={`text-category-desc-${category.id}`}>
+                        <p className="text-sm text-muted-foreground" data-testid={`text-category-desc-${category.id}`}>
                           {category.description}
                         </p>
                       </div>
-                      <ArrowRight className="w-5 h-5 flex-shrink-0" style={{ color: 'hsl(344, 65%, 50%)' }} data-testid={`button-select-${category.id}`} />
+                      <ArrowRight className="w-5 h-5 flex-shrink-0 text-primary" data-testid={`button-select-${category.id}`} />
                     </div>
                   </Card>
                 </TooltipTrigger>
@@ -138,24 +137,23 @@ export default function CategorySelection() {
 
         {recentAnalyses.length > 0 && (
           <div className="mt-12" data-testid="section-recent-analyses">
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-3" data-testid="text-recent-heading">
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3" data-testid="text-recent-heading">
               Recent Analyses
             </h2>
             <div className="grid gap-3 mb-3">
               {recentAnalyses.map((entry) => (
                 <Card
                   key={entry.id}
-                  className="hover-elevate active-elevate-2 cursor-pointer transition-all duration-200"
+                  className="hover-elevate active-elevate-2 cursor-pointer transition-colors duration-200 hover:border-primary/50"
                   onClick={() => navigate(`/analysis?saved=${entry.id}`)}
                   data-testid={`card-recent-${entry.id}`}
-                  style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
                 >
                   <div className="p-4 flex items-center gap-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-serif text-lg font-bold text-card-foreground" data-testid={`text-recent-category-${entry.id}`}>
+                      <h3 className="font-display text-lg font-bold text-card-foreground" data-testid={`text-recent-category-${entry.id}`}>
                         {categories.find(c => c.id === entry.category)?.title ?? entry.category}
                       </h3>
-                      <p className="text-sm text-card-foreground/70" data-testid={`text-recent-date-${entry.id}`}>
+                      <p className="text-sm text-muted-foreground" data-testid={`text-recent-date-${entry.id}`}>
                         Analyzed {new Date(entry.analyzedAt).toLocaleString()}
                       </p>
                     </div>
@@ -169,7 +167,7 @@ export default function CategorySelection() {
                       aria-label="Delete saved analysis"
                       data-testid={`button-delete-recent-${entry.id}`}
                     >
-                      <Trash2 className="w-4 h-4" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                      <Trash2 className="w-4 h-4 text-muted-foreground" />
                     </Button>
                   </div>
                 </Card>
@@ -182,7 +180,7 @@ export default function CategorySelection() {
         )}
 
         <div className="text-center mt-12">
-          <p className="text-sm" style={{ color: 'hsl(0, 0%, 100%)' }}>
+          <p className="text-sm text-muted-foreground">
             A free tool for the artistic community • 100% browser-based pattern matching • No data leaves your device
           </p>
         </div>

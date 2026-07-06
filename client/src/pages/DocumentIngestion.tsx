@@ -247,21 +247,21 @@ export default function DocumentIngestion() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen stage-gradient">
       <div className="container max-w-4xl mx-auto px-4 py-12">
-        <div className="flex items-start gap-4 mb-8">
-          <img 
-            src={logoImage} 
-            alt="ShowBusiness Shield" 
-            className="w-20 h-20 object-cover flex-shrink-0"
+        <div className="flex items-start gap-4 mb-8 animate-fade-in-up">
+          <img
+            src={logoImage}
+            alt="ShowBusiness Shield"
+            className="w-20 h-20 object-cover flex-shrink-0 rounded-lg"
             data-testid="img-logo"
           />
           <div className="flex-1">
-            <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1" data-testid="text-page-title">
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-1" data-testid="text-page-title">
               Upload Your Contract
             </h1>
-            <p className="text-base text-foreground/80" data-testid="text-contract-category">
-              Category: <span className="font-semibold">{categoryTitles[category]}</span>
+            <p className="text-base text-muted-foreground" data-testid="text-contract-category">
+              Category: <span className="font-semibold text-foreground">{categoryTitles[category]}</span>
             </p>
           </div>
           <Tooltip>
@@ -270,7 +270,6 @@ export default function DocumentIngestion() {
                 variant="outline"
                 size="icon"
                 onClick={() => navigate("/")}
-                className="border-accent text-accent hover:bg-accent/10"
                 data-testid="button-back"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -285,18 +284,17 @@ export default function DocumentIngestion() {
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Card 
-                className="hover-elevate active-elevate-2 cursor-pointer transition-all"
+              <Card
+                className="border-2 border-dashed border-border hover:border-primary/50 hover-elevate active-elevate-2 cursor-pointer transition-all duration-300"
                 onClick={handleCameraCapture}
                 data-testid="card-camera-option"
-                style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
-                    <Camera className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Camera className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-card-foreground" data-testid="text-camera-title">Take Photo</h3>
-                  <p className="text-xs text-card-foreground/70">Capture & OCR</p>
+                  <p className="text-xs text-muted-foreground">Capture & OCR</p>
                 </div>
               </Card>
             </TooltipTrigger>
@@ -307,18 +305,17 @@ export default function DocumentIngestion() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Card 
-                className="hover-elevate active-elevate-2 cursor-pointer transition-all"
+              <Card
+                className="border-2 border-dashed border-border hover:border-primary/50 hover-elevate active-elevate-2 cursor-pointer transition-all duration-300"
                 onClick={() => fileInputRef.current?.click()}
                 data-testid="card-upload-option"
-                style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
-                    <Upload className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Upload className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-card-foreground" data-testid="text-upload-title">Upload File</h3>
-                  <p className="text-xs text-card-foreground/70">PDF, DOCX, or TXT</p>
+                  <p className="text-xs text-muted-foreground">PDF, DOCX, or TXT</p>
                 </div>
               </Card>
             </TooltipTrigger>
@@ -338,18 +335,17 @@ export default function DocumentIngestion() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Card 
-                className="hover-elevate active-elevate-2 cursor-pointer transition-all"
+              <Card
+                className="border-2 border-dashed border-border hover:border-primary/50 hover-elevate active-elevate-2 cursor-pointer transition-all duration-300"
                 onClick={handleSystemCheck}
                 data-testid="card-system-check-option"
-                style={{ borderWidth: '2px', borderColor: 'hsl(45, 50%, 58%)', borderStyle: 'solid' }}
               >
                 <div className="p-6 flex flex-col items-center text-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-card border-2 flex items-center justify-center" style={{ borderColor: 'hsl(344, 65%, 50%)' }}>
-                    <FileText className="w-6 h-6" style={{ color: 'hsl(344, 65%, 50%)' }} />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-primary" />
                   </div>
                   <h3 className="font-semibold text-card-foreground">System Check</h3>
-                  <p className="text-xs text-card-foreground/70">Test Features</p>
+                  <p className="text-xs text-muted-foreground">Test Features</p>
                 </div>
               </Card>
             </TooltipTrigger>
@@ -472,40 +468,40 @@ export default function DocumentIngestion() {
           </DialogHeader>
           {isProcessing ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'hsl(45, 50%, 58%)' }} />
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           ) : systemCheckResults && (
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-pattern-matcher">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary" data-testid="check-pattern-matcher">
                 <span className="text-sm font-medium text-card-foreground">Pattern Matcher</span>
                 {systemCheckResults.patternMatcher ? (
-                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                 ) : (
-                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                  <XCircle className="w-5 h-5 text-destructive" />
                 )}
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-document-parsers">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary" data-testid="check-document-parsers">
                 <span className="text-sm font-medium text-card-foreground">Document Parsers</span>
                 {systemCheckResults.documentParsers ? (
-                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                 ) : (
-                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                  <XCircle className="w-5 h-5 text-destructive" />
                 )}
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-local-storage">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary" data-testid="check-local-storage">
                 <span className="text-sm font-medium text-card-foreground">Local Storage</span>
                 {systemCheckResults.localStorage ? (
-                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                 ) : (
-                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                  <XCircle className="w-5 h-5 text-destructive" />
                 )}
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-card" data-testid="check-camera">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary" data-testid="check-camera">
                 <span className="text-sm font-medium text-card-foreground">Camera Access</span>
                 {systemCheckResults.camera ? (
-                  <CheckCircle2 className="w-5 h-5" style={{ color: 'hsl(120, 60%, 50%)' }} />
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                 ) : (
-                  <XCircle className="w-5 h-5" style={{ color: 'hsl(0, 72%, 50%)' }} />
+                  <XCircle className="w-5 h-5 text-destructive" />
                 )}
               </div>
               <div className="pt-3">
