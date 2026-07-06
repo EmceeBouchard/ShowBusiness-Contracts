@@ -72,7 +72,7 @@ export default function CategorySelection() {
           <img
             src={logoImage}
             alt="ShowBusiness Shield"
-            className="w-24 h-24 object-cover flex-shrink-0 rounded-lg"
+            className="w-16 h-16 sm:w-24 sm:h-24 object-cover flex-shrink-0 rounded-lg"
             data-testid="img-logo"
           />
           <div>
@@ -83,6 +83,14 @@ export default function CategorySelection() {
               Your Contract Analysis Shield
             </p>
           </div>
+          <a
+            href="https://stage.showbusiness.actor"
+            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            data-testid="link-stage"
+          >
+            <Theater className="w-4 h-4" />
+            <span className="hidden sm:inline">Stage</span>
+          </a>
         </div>
 
         <div className="mb-8">
