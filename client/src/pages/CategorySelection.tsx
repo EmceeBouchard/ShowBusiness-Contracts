@@ -12,7 +12,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import logoImage from '@assets/showbusiness-shield-logo.jpg';
 
 const riskBadgeConfig = {
   safe: {
@@ -69,12 +68,6 @@ export default function CategorySelection() {
     <div className="min-h-screen stage-gradient">
       <div className="container max-w-4xl mx-auto px-4 py-12">
         <div className="flex items-start gap-4 mb-8 animate-fade-in-up">
-          <img
-            src={logoImage}
-            alt="ShowBusiness Shield"
-            className="w-16 h-16 sm:w-24 sm:h-24 object-cover flex-shrink-0 rounded-lg"
-            data-testid="img-logo"
-          />
           <div>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-gradient-primary mb-2" data-testid="text-app-title">
               ShowBusiness: Contracts
