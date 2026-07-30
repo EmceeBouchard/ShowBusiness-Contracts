@@ -43,7 +43,7 @@ The Routine was created with the `create_trigger` tool
 | Field | Value |
 | --- | --- |
 | `name` | `Threat Matrix weekly update` |
-| `cron_expression` | `17 14 * * 1` — Mondays at 14:17 **UTC** (~9:17am ET) |
+| `cron_expression` | `17 14 * * 1` — Mondays at 14:17 **UTC** (7:17am MST / 8:17am MDT, Mountain time) |
 | `create_new_session_on_fire` | `true` — each run starts a fresh, clean session |
 | `notifications` | `{ push: true, email: true }` — notify on completion |
 | `prompt` | The standing update prompt (summarized inline; full version in `threat-matrix-update-prompt.md`) |
