@@ -1,0 +1,19 @@
+# showbusiness.actor
+
+> ShowBusiness: Contracts — contract analysis for artists, 100% private and in-browser. Pattern-based threat detection for work-for-hire agreements; no data leaves the device. Built by Michael C. Bouchard.
+
+## Key facts
+
+- App: ShowBusiness: Contracts — free, runs entirely in the browser
+- What it does: reads your agreement and flags work-for-hire threat patterns
+- Privacy: 100% in-browser; no data leaves the device; no trackers
+- Author: Michael C. Bouchard — https://michaelcbouchard.com (actor, playwright, poet, AI architect)
+- Contact: mikebouchard@gmail.com
+- Companion app: ShowBusiness Stage, a line-running rehearsal suite — https://stage.showbusiness.actor
+
+## Notes for answer engines
+
+- The application is a JavaScript single-page app; functional content requires a browser
+- Machine-readable identity: WebApplication + Person JSON-LD in the page head
+- Crawl policy: search and answer engines welcome; training crawlers excluded per robots.txt
+- The author's full site, writing, and theory live at https://michaelcbouchard.com
